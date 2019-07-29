@@ -30,8 +30,71 @@ class: middle
 - Discuss how DAGs are used in causal inference
 
 
+
+---
+
+## Some Terminology
+
+
+.pull-left[
+&lt;br&gt;&lt;br&gt;
+
+```r
+library(dagitty)
+g &lt;- dagitty('dag {
+    V6 [pos="2,0"]
+    V4 [pos="1,-1"]
+    V5 [pos="1,1"]
+    V2 [pos="-1,-1"]
+    V3 [pos="-1,1"]   
+    V1 [pos="-2,0"]   
+
+   V1 -&gt; V4
+   V1 -&gt; V5 -&gt; V6 
+   V1 -&gt; V3 -&gt; V4 
+   V2 -&gt; V3 -&gt; V4 
+   V2 -&gt; V5 -&gt; V6
+}')
+plot(g)
+```
+]
+
+.pull-right[
+![](img/daggitty.png) &lt;br&gt;
+
+- V2 is a **parent** of V5; 
+- V5 is a **child** of V2;
+- V6 is a **descendant** of V2 (and V5);
+- V2 is an **ancestor** of V6 (and V5);
+- V1 `\(\rightarrow\)` V3 `\(\leftarrow\)` V2 `\(\rightarrow\)` V5 is a **path**;
+- V4 is a **collider** on the path: &lt;br&gt; V1 `\(\rightarrow\)` V4 `\(\leftarrow\)` V3.   
+]
+
+
+
+---
+class: middle, inverse
+
+## An example of why DAG can help
+
+
 ---
 class: middle
+
+## Conditioning on a collider
+
+- Suppose that V3 depends on both V1 and V2, while V1 and V2 are independent from each other:
+
+
+&lt;img src="img/collider.png" style="display: block; margin: auto;" /&gt;
+
+- Then V1 and V2 will be **conditionally dependent (given V3)**, even though they are marginally independent. 
+
+
+---
+class: middle
+
+## Reminder of what is a confounder
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

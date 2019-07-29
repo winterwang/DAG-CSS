@@ -42,5 +42,70 @@ class: middle
 - Discuss how DAGs are used in causal inference
 
 
+
+---
+
+## Some Terminology
+
+
+.pull-left[
+<br><br>
+```{r eval=FALSE}
+library(dagitty)
+g <- dagitty('dag {
+    V6 [pos="2,0"]
+    V4 [pos="1,-1"]
+    V5 [pos="1,1"]
+    V2 [pos="-1,-1"]
+    V3 [pos="-1,1"]   
+    V1 [pos="-2,0"]   
+
+   V1 -> V4
+   V1 -> V5 -> V6 
+   V1 -> V3 -> V4 
+   V2 -> V3 -> V4 
+   V2 -> V5 -> V6
+}')
+plot(g)
+```
+]
+
+.pull-right[
+![](img/daggitty.png) <br>
+
+- V2 is a **parent** of V5; 
+- V5 is a **child** of V2;
+- V6 is a **descendant** of V2 (and V5);
+- V2 is an **ancestor** of V6 (and V5);
+- V1 $\rightarrow$ V3 $\leftarrow$ V2 $\rightarrow$ V5 is a **path**;
+- V4 is a **collider** on the path: <br> V1 $\rightarrow$ V4 $\leftarrow$ V3.   
+]
+
+
+
+---
+class: middle, inverse
+
+## An example of why DAG can help
+
+
 ---
 class: middle
+
+## Conditioning on a collider
+
+- Suppose that V3 depends on both V1 and V2, while V1 and V2 are independent from each other:
+
+
+```{r echo = FALSE, fig.align='center'}
+knitr::include_graphics("img/collider.png")
+```
+
+- Then V1 and V2 will be **conditionally dependent (given V3)**, even though they are marginally independent. 
+
+
+---
+class: middle
+
+## Reminder of what is a confounder
+
