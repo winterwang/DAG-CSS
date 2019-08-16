@@ -1,5 +1,5 @@
 ---
-title: "Directed acyclic graphs (DAGs) in statistics"
+title: "Directed acyclic graphs (DAGs)"
 # subtitle: "why we use it and what does it provide"
 author: "王　超辰 | Chaochen Wang"
 date: "2019-08-23 17:00~18:00 @CSS"
@@ -37,11 +37,12 @@ mono_light(
 class: middle
 # Objectives
 
-- Introduce DAGs and how they can be used to find **conditional independences** from simpler assumptions.
+- Introduction of using directed acyclic graphs (DAGs) to visualize the assumed structural relationships between variables. 
 
-- Discuss how DAGs are used in causal inference
+- Identify collider using DAG helps us avoid spurious (fake) associations and collider bias. 
 
-
+???
+Paradoxical associations between an outcome and exposure are common in epidemiological studies using observational data.
 
 ---
 
@@ -306,3 +307,85 @@ knitr::include_graphics("img/complexcollider.png")
 - There is only one back-door path, and it is already blocked by the collider (C) -- thus we do not need to adjust for anything.
 
 - But some could consider C to be a classical confounder as it is associated with both exposure A (via $A \leftarrow W \rightarrow C$), and with the outcome Y (via $C \leftarrow W2 \rightarrow Y$) and is not in the causal pathway between A and Y.
+
+
+---
+class:middle
+
+## Motivating example
+
+- Evidence shows that exceeding the recommendations for 24h dietary sodium intake is associated with increased levels of systolic blood pressure (SBP).
+
+- With advancing age, the kidney function declines. 
+
+- Likewise, age is associated with changes in the blood pressures (SBP).
+
+- Therefore, age is a common cause of both high SBP and impaired sodium homeostasis. <br>- **Age is a confounder** for assocation between sodium intake (SOD) and SBP
+
+- However, high levels of 24-h excretion of urinary protein (PRO) are caused by high SBP and increased sodium intake (SOD). <br> - **PRO is a collider** between SOD and SBP.
+
+
+---
+class:middle 
+## DAG for the relationship of the exposure, outcome, confounder and collider
+
+```{r echo = FALSE, fig.align='center'}
+knitr::include_graphics("img/ageprosodsbp.png")
+```
+
+We are interested in estimating the effect of sodium intake (SOD) on SBP.
+
+
+---
+class:middle 
+## Data generation
+
+
+```{r}
+generateData <- function(n, seed){
+  set.seed(seed)
+  Age_years <- rnorm(n, 65, 5)
+  Sodium <- Age_years/18 + rnorm(n)
+  sbp <- 1.05 * Sodium + 2.00 * Age_years + rnorm(n)
+  hypertension <- ifelse(sbp > 140, 1, 0)
+  PRO <- 2.00 * sbp + 2.80 * Sodium + rnorm(n)
+  data.frame(sbp, hypertension, Sodium, Age_years, PRO)
+}
+
+ObsData <- generateData(n = 1000, seed = 777)
+
+head(ObsData)
+```
+
+
+---
+class: middle
+
+## Linear regressions using the `ObsData`
+
+- Model 0: $\text{SBP} = \beta_0 + \beta_1\text{SOD} + \varepsilon$ ;
+
+- Model 1: $\text{SBP} = \beta_0 + \beta_1\text{SOD} + \beta_2 \text{Age} + \varepsilon$ ;
+
+- Model 2: $\text{SBP} = \beta_0 + \beta_1\text{SOD} + \beta_2 \text{Age} + \beta_3\text{PRO} + \varepsilon$
+
+```{r}
+# Model fit
+fit0 <- lm(sbp ~ Sodium, data = ObsData)
+fit1 <- lm(sbp ~ Sodium + Age_years, data = ObsData)
+fit2 <- lm(sbp ~ Sodium + Age_years + PRO, data = ObsData)
+```
+
+
+
+---
+class: middle 
+
+## The DAG web application 
+
+[http://www.dagitty.net/dags.html](http://www.dagitty.net/dags.html)
+
+
+Johannes Textor, Benito van der Zander, Mark K. Gilthorpe, Maciej Liskiewicz, George T.H. Ellison. 
+Robust causal inference using directed acyclic graphs: the R package 'dagitty'.
+International Journal of Epidemiology 45(6):1887-1894, 2016.

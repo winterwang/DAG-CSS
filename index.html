@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Directed acyclic graphs (DAGs) in statistics</title>
+    <title>Directed acyclic graphs (DAGs)</title>
     <meta charset="utf-8" />
     <meta name="author" content="王　超辰 | Chaochen Wang" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -10,7 +10,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Directed acyclic graphs (DAGs) in statistics
+# Directed acyclic graphs (DAGs)
 ### 王　超辰 | Chaochen Wang
 ### 2019-08-23 17:00~18:00 <span class="citation">@CSS</span>
 
@@ -25,11 +25,12 @@ class: center, middle, inverse, title-slide
 class: middle
 # Objectives
 
-- Introduce DAGs and how they can be used to find **conditional independences** from simpler assumptions.
+- Introduction of using directed acyclic graphs (DAGs) to visualize the assumed structural relationships between variables. 
 
-- Discuss how DAGs are used in causal inference
+- Identify collider using DAG helps us avoid spurious (fake) associations and collider bias. 
 
-
+???
+Paradoxical associations between an outcome and exposure are common in epidemiological studies using observational data.
 
 ---
 
@@ -323,6 +324,98 @@ class: middle
 - There is only one back-door path, and it is already blocked by the collider (C) -- thus we do not need to adjust for anything.
 
 - But some could consider C to be a classical confounder as it is associated with both exposure A (via `\(A \leftarrow W \rightarrow C\)`), and with the outcome Y (via `\(C \leftarrow W2 \rightarrow Y\)`) and is not in the causal pathway between A and Y.
+
+
+---
+class:middle
+
+## Motivating example
+
+- Evidence shows that exceeding the recommendations for 24h dietary sodium intake is associated with increased levels of systolic blood pressure (SBP).
+
+- With advancing age, the kidney function declines. 
+
+- Likewise, age is associated with changes in the blood pressures (SBP).
+
+- Therefore, age is a common cause of both high SBP and impaired sodium homeostasis. &lt;br&gt;- **Age is a confounder** for assocation between sodium intake (SOD) and SBP
+
+- However, high levels of 24-h excretion of urinary protein (PRO) are caused by high SBP and increased sodium intake (SOD). &lt;br&gt; - **PRO is a collider** between SOD and SBP.
+
+
+---
+class:middle 
+## DAG for the relationship of the exposure, outcome, confounder and collider
+
+&lt;img src="img/ageprosodsbp.png" style="display: block; margin: auto;" /&gt;
+
+We are interested in estimating the effect of sodium intake (SOD) on SBP.
+
+
+---
+class:middle 
+## Data generation
+
+
+
+```r
+generateData &lt;- function(n, seed){
+  set.seed(seed)
+  Age_years &lt;- rnorm(n, 65, 5)
+  Sodium &lt;- Age_years/18 + rnorm(n)
+  sbp &lt;- 1.05 * Sodium + 2.00 * Age_years + rnorm(n)
+  hypertension &lt;- ifelse(sbp &gt; 140, 1, 0)
+  PRO &lt;- 2.00 * sbp + 2.80 * Sodium + rnorm(n)
+  data.frame(sbp, hypertension, Sodium, Age_years, PRO)
+}
+
+ObsData &lt;- generateData(n = 1000, seed = 777)
+
+head(ObsData)
+```
+
+```
+##        sbp hypertension   Sodium Age_years      PRO
+## 1 139.7215            0 3.373645  67.44893 289.2140
+## 2 130.4990            0 3.194070  63.00729 268.1802
+## 3 141.0323            1 4.064678  67.55418 290.9316
+## 4 127.5514            0 2.313437  63.00594 263.2170
+## 5 150.7820            1 4.090570  73.19343 313.2848
+## 6 141.4549            1 3.887545  68.10637 293.4832
+```
+
+
+---
+class: middle
+
+## Linear regressions using the `ObsData`
+
+- Model 0: `\(\text{SBP} = \beta_0 + \beta_1\text{SOD} + \varepsilon\)` ;
+
+- Model 1: `\(\text{SBP} = \beta_0 + \beta_1\text{SOD} + \beta_2 \text{Age} + \varepsilon\)` ;
+
+- Model 2: `\(\text{SBP} = \beta_0 + \beta_1\text{SOD} + \beta_2 \text{Age} + \beta_3\text{PRO} + \varepsilon\)`
+
+
+```r
+# Model fit
+fit0 &lt;- lm(sbp ~ Sodium, data = ObsData)
+fit1 &lt;- lm(sbp ~ Sodium + Age_years, data = ObsData)
+fit2 &lt;- lm(sbp ~ Sodium + Age_years + PRO, data = ObsData)
+```
+
+
+
+---
+class: middle 
+
+## The DAG web application 
+
+[http://www.dagitty.net/dags.html](http://www.dagitty.net/dags.html)
+
+
+Johannes Textor, Benito van der Zander, Mark K. Gilthorpe, Maciej Liskiewicz, George T.H. Ellison. 
+Robust causal inference using directed acyclic graphs: the R package 'dagitty'.
+International Journal of Epidemiology 45(6):1887-1894, 2016.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
