@@ -7,7 +7,7 @@ author:
     url: https\://yihui.name
 abstract: >
   As a LaTeX user for 15 years, I have suffered from two problems related to the installation of LaTeX and maintenance of packages: 1) The full versions of common LaTeX distributions are often too big, whereas the smaller basic versions often lack packages that I frequently use; 2) It is tedious to figure out which missing packages to install by reading the error log from the LaTeX compilation. TinyTeX (https://yihui.name/tinytex/) is my attempt to address these problems. The basic version of TinyTeX is relatively small (150MB on Linux/macOS when installed), and you only install additional packages if/when you actually need them. Further, if you are an R user, the installation of missing packages can be automatic when you compile LaTeX or R Markdown documents through the R package **tinytex**.
-documentclass: tugboat
+documentclass: ltugboat
 biblio-style: tugboat
 bibliography: tinytex.bib
 preamble: |
