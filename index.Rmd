@@ -2,7 +2,7 @@
 title: "Directed acyclic graphs (DAGs)"
 # subtitle: "why we use it and what does it provide"
 author: "王　超辰 | Chaochen Wang"
-date: "2019-08-23 17:00~18:00 @CSS"
+date: "2019-08-26 17:00~18:00 @CSS"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -147,7 +147,7 @@ class: middle
 
 .pull-right[
 
-- To sufficiently **control for confounding**, we mush identify a set of variables in the DAG that **block all open back-door paths** from the exposure (A) to the outcome (Y).
+- To sufficiently **control for confounding**, we must identify a set of variables in the DAG that **block all open back-door paths** from the exposure (A) to the outcome (Y).
 
 ```{r echo = FALSE, fig.align='center'}
 knitr::include_graphics("img/confounder.png")
@@ -158,7 +158,7 @@ knitr::include_graphics("img/confounder.png")
 ---
 class: middle
 
-## Confounding effect and regression adjustment
+### Confounding effect and regression adjustment (simulation demonstration)
 
 ```{r}
 N <-  1000 # sample size
