@@ -353,7 +353,7 @@ We are interested in estimating the effect of sodium intake (SOD) on SBP.
 
 ---
 class:middle 
-## Data generation
+## Data generation (simulation demo)
 
 
 
@@ -401,6 +401,63 @@ class: middle
 fit0 &lt;- lm(sbp ~ Sodium, data = ObsData)
 fit1 &lt;- lm(sbp ~ Sodium + Age_years, data = ObsData)
 fit2 &lt;- lm(sbp ~ Sodium + Age_years + PRO, data = ObsData)
+```
+
+
+---
+class: middle
+### Results from the crude, and age-adjusted models for the association between SOD and SBP
+
+
+```r
+regress.display(fit0, decimal = 3)
+```
+
+```
+## Linear regression predicting sbp
+##  
+##                     Coeff.(95%CI)       P(t-test) P(F-test)
+## Sodium (cont. var.) 3.96 (3.375,4.545)  &lt; 0.001   &lt; 0.001  
+##                                                            
+## No. of observations = 1000
+```
+
+```r
+regress.display(fit1, decimal = 3)
+```
+
+```
+## Linear regression predicting sbp
+##  
+##                        adj. coeff.(95%CI)   P(t-test) P(F-test)
+## Sodium (cont. var.)    1.039 (0.977,1.102)  &lt; 0.001   &lt; 0.001  
+##                                                                
+## Age_years (cont. var.) 2.004 (1.992,2.017)  &lt; 0.001   &lt; 0.001  
+##                                                                
+## No. of observations = 1000
+```
+
+
+---
+class: middle 
+### Results from the age and PRO(collider)-adjusted models for the association between SOD and SBP
+
+
+```r
+regress.display(fit2, decimal = 3)
+```
+
+```
+## Linear regression predicting sbp
+##  
+##                        adj. coeff.(95%CI)      P(t-test) P(F-test)
+## Sodium (cont. var.)    -0.902 (-0.973,-0.831)  &lt; 0.001   &lt; 0.001  
+##                                                                   
+## Age_years (cont. var.) 0.417 (0.364,0.47)      &lt; 0.001   &lt; 0.001  
+##                                                                   
+## PRO (cont. var.)       0.396 (0.383,0.409)     &lt; 0.001   &lt; 0.001  
+##                                                                   
+## No. of observations = 1000
 ```
 
 

@@ -338,7 +338,7 @@ We are interested in estimating the effect of sodium intake (SOD) on SBP.
 
 ---
 class:middle 
-## Data generation
+## Data generation (simulation demo)
 
 
 ```{r}
@@ -374,6 +374,25 @@ class: middle
 fit0 <- lm(sbp ~ Sodium, data = ObsData)
 fit1 <- lm(sbp ~ Sodium + Age_years, data = ObsData)
 fit2 <- lm(sbp ~ Sodium + Age_years + PRO, data = ObsData)
+```
+
+
+---
+class: middle
+### Results from the crude, and age-adjusted models for the association between SOD and SBP
+
+```{r}
+regress.display(fit0, decimal = 3)
+regress.display(fit1, decimal = 3)
+```
+
+
+---
+class: middle 
+### Results from the age and PRO(collider)-adjusted models for the association between SOD and SBP
+
+```{r}
+regress.display(fit2, decimal = 3)
 ```
 
 
