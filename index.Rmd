@@ -629,6 +629,48 @@ knitr::include_graphics("img/recallbias.png")
 
 ]
 
+---
+class: middle
+
+# Exercise -- (2)
+
+A nutritional epidemiologist comes to discuss an analysis of some data that she has collected. She is interested in whether or not eating dark green vegetables protects against stomach cancer. She also collected the following baseline information from the participants (left), but she also believes that there are some unobserved variables (right) that she was not able to collect:
+
+.pull-left[
+**Observed variables**
+
+1. Age
+2. Alcohol intake
+3. Smoking status
+]
+
+.pull-right[
+**Unobserved variables**
+
+1. Allergies
+2. Risky behaviours
+]
+
+
+---
+class: middle 
+
+## If the following causal diagram is correct
+
+```{r echo = FALSE, fig.align='center'}
+knitr::include_graphics("img/dagitty-model.png")
+```
+
+
+---
+class: middle, inverse, center
+
+## What do you think about the consequences of adjusting for the following variables?
+
+### Smoking status 
+
+### Alcohol intake
+
 
 ---
 class: middle 
