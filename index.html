@@ -268,7 +268,6 @@ class: middle
 
 
 ```r
-library(epiDisplay)
 regress.display(fit3) ## crude coefficient
 ```
 
@@ -317,7 +316,7 @@ class: middle
 - The following graph shows another, more complex collider structure usually known as M-bias.  
 
 
-&lt;img src="img/complexcollider.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/complexcolloider.png" style="display: block; margin: auto;" /&gt;
 
 - The collider (C) is the effect of a common cause (W1) of the exposure (A) and common cause (W2) of the outcome (Y). 
 
@@ -384,6 +383,13 @@ head(ObsData)
 ```
 
 
+
+???
+- The simulation assumes linear relationships between the variables; 
+- The true causal effect of sodium intake on SBP is 1.05; 
+- The coefficients for the association of PRO with SBP ad sodium intake are 2.0, and 2.8
+
+
 ---
 class: middle
 
@@ -402,6 +408,13 @@ fit0 &lt;- lm(sbp ~ Sodium, data = ObsData)
 fit1 &lt;- lm(sbp ~ Sodium + Age_years, data = ObsData)
 fit2 &lt;- lm(sbp ~ Sodium + Age_years + PRO, data = ObsData)
 ```
+
+???
+- We fit three different linear regression models 
+- to evaluate the effect of sodium intake on SBP
+- Model 0 is the unadjusted model 
+- Model 1 adjusted for age only 
+- Model 2 adjusted for age and the collider (PRO).
 
 
 ---
@@ -437,6 +450,11 @@ regress.display(fit1, decimal = 3)
 ## No. of observations = 1000
 ```
 
+???
+
+- The crude model showed biased association between sodium intake and SBP caused by confounding effect from age. 
+
+- The age-adjusted model showed the causal effect that is close to the true effect. 
 
 ---
 class: middle 
@@ -460,6 +478,109 @@ regress.display(fit2, decimal = 3)
 ## No. of observations = 1000
 ```
 
+???
+
+- The collider model suggested a negative relationship between sodium intake and SBP.
+- -0.902 suggested that for one unit increase in sodium take, the expected SBP **decrease** by 0.9 mmHg.
+- This is not only wrong, it is completely wrong. 
+
+
+---
+class: middle, inverse, center 
+## How about conditioning colliders in a logistic regression model?
+
+---
+class: middle
+
+### Logistic regression model1 -- crude model:
+
+
+
+```r
+fit3 &lt;- glm(hypertension ~ Sodium, family = binomial(link = "logit"), data = ObsData)
+# logistic.display(fit3, decimal = 3)
+library(broom)
+tidy(fit3, exponentiate =  TRUE, conf.int = TRUE)%&gt;% 
+   mutate_if(is.numeric, round, digits = 8)
+```
+
+```
+## # A tibble: 2 x 7
+##   term        estimate std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   0.0218    0.332     -11.5        0   0.0112    0.0411
+## 2 Sodium        2.15      0.0829      9.24       0   1.83      2.54
+```
+
+---
+class: middle 
+
+### Logistic regression model2 -- age adjusted:
+
+
+
+```r
+fit4 &lt;- glm(hypertension ~ Sodium + Age_years, family = binomial(link = "logit"), data = ObsData)
+# logistic.display(fit4, decimal = 3)
+tidy(fit4, exponentiate =  TRUE, conf.int = TRUE) %&gt;% 
+   mutate_if(is.numeric, round, digits = 8)
+```
+
+```
+## # A tibble: 3 x 7
+##   term        estimate std.error statistic    p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     0       34.2       -7.69 0              0          0  
+## 2 Sodium          7.95     0.384      5.40 0.00000007     4.00      18.2
+## 3 Age_years      42.6      0.489      7.67 0             18.3      126.
+```
+
+???
+
+- Age adjusted OR for one-unit increase of Sodium intake on being hypertensive was 7.94. 
+
+
+---
+class: middle 
+
+### Logistic regression model3 -- collider adjusted:
+
+
+
+```r
+fit5 &lt;- glm(hypertension ~ Sodium + Age_years + PRO, family = binomial(link = "logit"), data = ObsData)
+# logistic.display(fit5, decimal = 3)
+tidy(fit5, exponentiate =  TRUE, conf.int = TRUE)%&gt;% 
+   mutate_if(is.numeric, round, digits = 8)
+```
+
+```
+## # A tibble: 4 x 7
+##   term        estimate std.error statistic     p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   0        119.        -5.13 0.000000290 0            0    
+## 2 Sodium        0.0179     1.27      -3.17 0.00153     0.000956     0.160
+## 3 Age_years     3.43       0.771      1.60 0.110       0.811       18.0  
+## 4 PRO           6.43       0.424      4.39 0.0000113   3.25        17.9
+```
+
+???
+- Collider adjusted model gave protective effect again. 
+
+- And one unit increase in sodium intake would decrease the risk of hypertension by 98%!!!
+ 
+
+---
+class: middle 
+
+### Logistic regression models -- odds ratios:
+
+
+&lt;img src="index_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+One unit increase in SOD intake would **decrease the risk of hypertension by 98%!!!**
 
 
 ---

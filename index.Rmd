@@ -267,7 +267,6 @@ class: middle
 ## Results from the crude and adjusted models (collider effect)
 
 ```{r}
-library(epiDisplay)
 regress.display(fit3) ## crude coefficient
 regress.display(fit4) ## adjusted coefficient
 ```
@@ -299,7 +298,7 @@ class: middle
 
 
 ```{r echo = FALSE, fig.align='center'}
-knitr::include_graphics("img/complexcollider.png")
+knitr::include_graphics("img/complexcolloider.png")
 ```
 
 - The collider (C) is the effect of a common cause (W1) of the exposure (A) and common cause (W2) of the outcome (Y). 
@@ -358,6 +357,13 @@ head(ObsData)
 ```
 
 
+
+???
+- The simulation assumes linear relationships between the variables; 
+- The true causal effect of sodium intake on SBP is 1.05; 
+- The coefficients for the association of PRO with SBP ad sodium intake are 2.0, and 2.8
+
+
 ---
 class: middle
 
@@ -376,6 +382,13 @@ fit1 <- lm(sbp ~ Sodium + Age_years, data = ObsData)
 fit2 <- lm(sbp ~ Sodium + Age_years + PRO, data = ObsData)
 ```
 
+???
+- We fit three different linear regression models 
+- to evaluate the effect of sodium intake on SBP
+- Model 0 is the unadjusted model 
+- Model 1 adjusted for age only 
+- Model 2 adjusted for age and the collider (PRO).
+
 
 ---
 class: middle
@@ -386,6 +399,11 @@ regress.display(fit0, decimal = 3)
 regress.display(fit1, decimal = 3)
 ```
 
+???
+
+- The crude model showed biased association between sodium intake and SBP caused by confounding effect from age. 
+
+- The age-adjusted model showed the causal effect that is close to the true effect. 
 
 ---
 class: middle 
@@ -395,6 +413,141 @@ class: middle
 regress.display(fit2, decimal = 3)
 ```
 
+???
+
+- The collider model suggested a negative relationship between sodium intake and SBP.
+- -0.902 suggested that for one unit increase in sodium take, the expected SBP **decrease** by 0.9 mmHg.
+- This is not only wrong, it is completely wrong. 
+
+
+---
+class: middle, inverse, center 
+## How about conditioning colliders in a logistic regression model?
+
+---
+class: middle
+
+### Logistic regression model1 -- crude model:
+
+
+```{r}
+fit3 <- glm(hypertension ~ Sodium, family = binomial(link = "logit"), data = ObsData)
+# logistic.display(fit3, decimal = 3)
+library(broom)
+tidy(fit3, exponentiate =  TRUE, conf.int = TRUE)%>% 
+   mutate_if(is.numeric, round, digits = 8)
+```
+
+---
+class: middle 
+
+### Logistic regression model2 -- age adjusted:
+
+
+```{r warning=FALSE}
+fit4 <- glm(hypertension ~ Sodium + Age_years, family = binomial(link = "logit"), data = ObsData)
+# logistic.display(fit4, decimal = 3)
+tidy(fit4, exponentiate =  TRUE, conf.int = TRUE) %>% 
+   mutate_if(is.numeric, round, digits = 8)
+```
+
+???
+
+- Age adjusted OR for one-unit increase of Sodium intake on being hypertensive was 7.94. 
+
+
+---
+class: middle 
+
+### Logistic regression model3 -- collider adjusted:
+
+
+```{r warning=FALSE}
+fit5 <- glm(hypertension ~ Sodium + Age_years + PRO, family = binomial(link = "logit"), data = ObsData)
+# logistic.display(fit5, decimal = 3)
+tidy(fit5, exponentiate =  TRUE, conf.int = TRUE)%>% 
+   mutate_if(is.numeric, round, digits = 8)
+```
+
+???
+- Collider adjusted model gave protective effect again. 
+
+- And one unit increase in sodium intake would decrease the risk of hypertension by 98%!!!
+ 
+
+---
+class: middle 
+
+### Logistic regression models -- odds ratios:
+
+
+```{r echo=FALSE, fig.align='center', fig.height=7, fig.width=11, message=FALSE, warning=FALSE}
+library(dplyr)
+library(forestplot)
+
+or <- round(exp(fit3$coefficients[2]), 3)
+ci95 <- exp(confint(fit3))[-1, ]
+
+lci <- round(ci95[1],3)
+uci <- round(ci95[2],3)
+model <- c("Crude")
+result1 <- data.frame(model, or, lci, uci, stringsAsFactors = FALSE)
+
+or <- round(exp(fit4$coef)[2],3)
+ci95 <- exp(confint(fit4))[2,]
+lci <- round(ci95[1],3)
+uci <- round(ci95[2],3)
+model <- c("Adjusted")
+result2 <- data.frame(model, or, lci, uci, stringsAsFactors = FALSE)
+
+
+or <- round(exp(fit5$coef)[2],3)
+ci95 <- exp(confint(fit5))[2,]
+lci <- round(ci95[1],3)
+uci <- round(ci95[2],3)
+model <- c("Collider")
+result3 <- data.frame(model, or, lci, uci, stringsAsFactors = FALSE)
+
+
+# Models fit visualization (Forest plot function and plot) to depict the collider effect
+or_graph <- function(fp){
+    
+    tabla <- cbind(c("Model", paste(fp$model)),
+                   c("Odds ratio", fp$or), 
+                   c("95%CI", paste0("(", fp$lci, " - ", fp$uci, ")")))
+
+    forestplot(labeltext = tabla,
+               graph.pos = 3,
+               mean = c(NA, fp$or),
+               is.summary = c(TRUE, rep(FALSE, nrow(fp))),
+               lower = c(NA, fp$lci),
+               upper = c(NA, fp$uci),
+               xlab = "Odds ratio",
+               txt_gp = fpTxtGp(label = gpar(cex = 1.25),
+                                ticks = gpar(cex = 1.1),
+                                xlab  = gpar(cex = 1.2),
+                                title = gpar(cex = 1.2)),
+               col = fpColors(box = "royalblue", lines = "royalblue", zero = "black"),
+               cex = 1.5,
+               clip = c(0, 10),
+               zero = 1,
+               boxsize = 0.05,
+               lwd.ci = 2,
+               ci.vertices = TRUE,
+               lineheight = "auto",
+               xticks = seq(0, 10, 1),
+               ci.vertices.height = 0.1,
+               grid = TRUE
+    )
+}
+
+fp <- rbind(result1, result2, result3); fp %>% or_graph()
+
+```
+
+
+
+One unit increase in SOD intake would **decrease the risk of hypertension by 98%!!!**
 
 
 ---

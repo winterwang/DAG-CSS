@@ -72,10 +72,10 @@ plot(g)
 
 g <- dagitty('dag{
              C [pos = "0, 0"]
-             A [pos = "-1, -1"]
-             Y [pos = "1, -1"]
-             W1 [pos = "-1, 1"]
-             W2 [pos = "1, 1"]
+             W1 [pos = "-1, -1"]
+             W2 [pos = "1, -1"]
+             A [pos = "-1, 1"]
+             Y [pos = "1, 1"]
              
              C <- W1
              C <- W2
