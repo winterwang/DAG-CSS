@@ -586,6 +586,21 @@ One unit increase in SOD intake would **decrease the risk of hypertension by 98%
 ---
 class: middle 
 
+## What did we learn?
+
+
+- The decision whether to include or exclude the variable in a regression model is based on whether the purpose of the study is prediction or explanation/causation. 
+
+- Adding a collider to a regression model is **not advised when we are intereted in estimation of causal effects**, because this will open back-door path. 
+
+- However, if prediction is the purpose of the model, inclusion of colliders may be advisable if it can reduce the model's prediction error. 
+
+- Most epidemiological researches are trying to understand/explain **how the world works (causation)**. We should be aware of such kind of collider bias. 
+
+
+---
+class: middle 
+
 ## The DAG web application 
 
 [http://www.dagitty.net/dags.html](http://www.dagitty.net/dags.html)
@@ -594,6 +609,23 @@ class: middle
 Johannes Textor, Benito van der Zander, Mark K. Gilthorpe, Maciej Liskiewicz, George T.H. Ellison. 
 Robust causal inference using directed acyclic graphs: the R package 'dagitty'.
 International Journal of Epidemiology 45(6):1887-1894, 2016.
+
+
+---
+class: middle
+
+## Thanks to the following paper
+
+Luque-Fernandez, M. A. et al. Educational Note: Paradoxical collider effect in the analysis of non-communicable disease epidemiological data: a reproducible illustration and web application. International Journal of Epidemiology 48, 640–653 (2019).
+
+
+
+---
+class: middle, center 
+
+# The end
+
+## slide address: https://wangcc.me/DAG-CSS
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
