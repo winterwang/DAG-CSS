@@ -501,7 +501,7 @@ fit3 &lt;- glm(hypertension ~ Sodium, family = binomial(link = "logit"), data = 
 # logistic.display(fit3, decimal = 3)
 library(broom)
 tidy(fit3, exponentiate =  TRUE, conf.int = TRUE)%&gt;% 
-   mutate_if(is.numeric, round, digits = 8)
+   mutate_if(is.numeric, round, digits = 4)
 ```
 
 ```
@@ -523,16 +523,16 @@ class: middle
 fit4 &lt;- glm(hypertension ~ Sodium + Age_years, family = binomial(link = "logit"), data = ObsData)
 # logistic.display(fit4, decimal = 3)
 tidy(fit4, exponentiate =  TRUE, conf.int = TRUE) %&gt;% 
-   mutate_if(is.numeric, round, digits = 8)
+   mutate_if(is.numeric, round, digits = 4)
 ```
 
 ```
 ## # A tibble: 3 x 7
-##   term        estimate std.error statistic    p.value conf.low conf.high
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)     0       34.2       -7.69 0              0          0  
-## 2 Sodium          7.95     0.384      5.40 0.00000007     4.00      18.2
-## 3 Age_years      42.6      0.489      7.67 0             18.3      126.
+##   term        estimate std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     0       34.2       -7.69       0     0          0  
+## 2 Sodium          7.95     0.384      5.40       0     4.00      18.2
+## 3 Age_years      42.6      0.489      7.67       0    18.3      126.
 ```
 
 ???
@@ -551,17 +551,17 @@ class: middle
 fit5 &lt;- glm(hypertension ~ Sodium + Age_years + PRO, family = binomial(link = "logit"), data = ObsData)
 # logistic.display(fit5, decimal = 3)
 tidy(fit5, exponentiate =  TRUE, conf.int = TRUE)%&gt;% 
-   mutate_if(is.numeric, round, digits = 8)
+   mutate_if(is.numeric, round, digits =4)
 ```
 
 ```
 ## # A tibble: 4 x 7
-##   term        estimate std.error statistic     p.value conf.low conf.high
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)   0        119.        -5.13 0.000000290 0            0    
-## 2 Sodium        0.0179     1.27      -3.17 0.00153     0.000956     0.160
-## 3 Age_years     3.43       0.771      1.60 0.110       0.811       18.0  
-## 4 PRO           6.43       0.424      4.39 0.0000113   3.25        17.9
+##   term        estimate std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   0        119.        -5.13  0         0         0    
+## 2 Sodium        0.0179     1.27      -3.17  0.0015    0.001     0.160
+## 3 Age_years     3.43       0.771      1.60  0.110     0.811    18.0  
+## 4 PRO           6.43       0.424      4.39  0         3.25     17.9
 ```
 
 ???

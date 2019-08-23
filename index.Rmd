@@ -435,7 +435,7 @@ fit3 <- glm(hypertension ~ Sodium, family = binomial(link = "logit"), data = Obs
 # logistic.display(fit3, decimal = 3)
 library(broom)
 tidy(fit3, exponentiate =  TRUE, conf.int = TRUE)%>% 
-   mutate_if(is.numeric, round, digits = 8)
+   mutate_if(is.numeric, round, digits = 4)
 ```
 
 ---
@@ -448,7 +448,7 @@ class: middle
 fit4 <- glm(hypertension ~ Sodium + Age_years, family = binomial(link = "logit"), data = ObsData)
 # logistic.display(fit4, decimal = 3)
 tidy(fit4, exponentiate =  TRUE, conf.int = TRUE) %>% 
-   mutate_if(is.numeric, round, digits = 8)
+   mutate_if(is.numeric, round, digits = 4)
 ```
 
 ???
@@ -466,7 +466,7 @@ class: middle
 fit5 <- glm(hypertension ~ Sodium + Age_years + PRO, family = binomial(link = "logit"), data = ObsData)
 # logistic.display(fit5, decimal = 3)
 tidy(fit5, exponentiate =  TRUE, conf.int = TRUE)%>% 
-   mutate_if(is.numeric, round, digits = 8)
+   mutate_if(is.numeric, round, digits =4)
 ```
 
 ???
