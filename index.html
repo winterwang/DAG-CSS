@@ -601,6 +601,69 @@ class: middle
 ---
 class: middle 
 
+# Exercise -- (1)
+
+A case-control study is conducted in order to address whether exposure to a particular non-steroidal anti-inflammatory drug during the first trimester of pregancy causes a congenital defect `\((D)\)` arising in the second trimester:
+
+- `\(D = 1\)` for cases, `\(D = 0\)` for controls;
+
+- `\(E^*\)` denotes the use of the drug during the first trimester as **self-reported 1 month postpartum**;
+
+- `\(E\)` denotes the use of the drug during the first trimester as **recorded in accurate medical records**.
+
+
+Draw an appropriate causal diagram for this problem, involving `\(D\)`, `\(E\)` and `\(E^*\)`
+
+
+---
+class: middle 
+
+# Exercise -- (1)
+
+Here are the results of various analyses exploring (crude and adjusted) associations between `\(E\)`, `\(E^*\)`, and `\(D\)`:
+
+
+- Crude OR (odds ratio) for association between `\(E\)` and `\(D\)`: `\(1.73\)`; 
+
+- OR for association between `\(E\)` and `\(D\)`, adjusted for `\(E^*\)`: `\(1.06\)`; 
+
+- Crude OR (odds ratio) for association between `\(E^*\)` and `\(D\)`: `\(2.00\)`;
+
+- OR for association between `\(E^*\)` and `\(D\)`, adjusted for `\(E\)`: `\(1.52\)`.
+
+**What is the most appropriate analysis to answer the question of interest?**
+
+---
+class: middle 
+
+# Exercise -- (1)
+
+.pull-left[- The case-control study setting with recall bias:
+
+&lt;img src="img/recallbias.png" style="display: block; margin: auto;" /&gt;
+
+- The causal effect of interest is from `\(E\)` to `\(D\)`;
+
+- The exposure reported by the mother `\(E^*\)` might be affected by the true exposure as well as the disease outcome.
+]
+
+.pull-right[
+
+- The arrow from `\(D\)` to `\(E^*\)` represents **the recall bias**;
+
+- Because conditional on `\(E\)`, there is an association between `\(E^*\)` and `\(D\)` (OR = 1.52), therefore, **recall bias is present**.
+
+- If there is no recall bias, ie. no arrow from `\(D\)` to `\(E^*\)`, conditioning on E will give us a conditional odds ratio of 1 `\(\neq\)` 1.52. 
+
+
+- Conditioning on `\(E^*\)` changes the estimate of association between `\(E\)` and `\(D\)` to null (1.06 `\(\approx\)` 1.00) &lt;br&gt; `\(\Rightarrow\)` `\(E^*\)` is the collider. 
+
+]
+
+
+---
+class: middle 
+
 ## The DAG web application 
 
 [http://www.dagitty.net/dags.html](http://www.dagitty.net/dags.html)
