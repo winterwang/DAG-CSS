@@ -756,9 +756,9 @@ class: middle
 If someone is a heavy drinker, we also know that he/she is allergic to alcohol (so drinking alcohol is a risky behaviour). And somehow this allergy is related with lower intake of darkgreen vegetable. Then given the level of alcohol drinking (within strata of alcohol intake), a low vegetable intake, associated with allergies will related with risky behaviour, and will turn out to be associated with stomach cancer. 
 
 ---
-class:middle, inverse, center
+class:middle, inverse 
 
-## Your friend wants to report the results adjusted for alcohol because it shows that vegetable intake is protective against stomach cancer. 
+## Your friend wants to report the results adjusted for alcohol because they showed that vegetable intake is protective against stomach cancer. 
 
 --
 ## do you agree?
@@ -767,8 +767,23 @@ class:middle, inverse, center
 ## you better say NO. 
 
 --
-## because this is a fake association caused by collider bias (controlling for alcohol intake)
+## because this is a fake association caused by *collider bias* (controlling for alcohol intake)
 
+
+---
+class: middle, inverse
+
+## Finnally, 
+
+--
+## Do you agree with your friend's DAG graph?
+
+
+???
+
+- If there is an arrow from alcohol to stomach cancer, then this would suggest we should collect data on allergies or about risky behaviour. 
+
+- Without this DAG graph, such kind of observation may not be so apparent. 
 
 ---
 class: middle
@@ -777,7 +792,7 @@ class: middle
 
 Luque-Fernandez, M. A. et al. Educational Note: Paradoxical collider effect in the analysis of non-communicable disease epidemiological data: a reproducible illustration and web application. International Journal of Epidemiology 48, 640–653 (2019).
 
-
+## Thanks to [Dr. Karla Diaz-Ordaz](https://www.lshtm.ac.uk/aboutus/people/diaz-ordaz.karla)
 
 ---
 class: middle, center 
