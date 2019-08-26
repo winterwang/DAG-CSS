@@ -83,28 +83,6 @@ plot(g)
 ]
 
 
-
----
-class: middle, inverse
-
-## An example of why DAG can help
-
-
----
-class: middle
-
-## Conditioning on a collider
-
-- Suppose that V3 depends on both V1 and V2, while V1 and V2 are independent from each other:
-
-
-```{r echo = FALSE, fig.align='center'}
-knitr::include_graphics("img/collider.png")
-```
-
-- Then V1 and V2 will be **conditionally dependent (given V3)**, even though they are marginally independent. 
-
-
 ---
 class: middle
 
@@ -189,7 +167,7 @@ fit2 <- lm(Y ~ A + W)              # adjusted model
 
 
 ---
-class: middle 
+class:middle 
 
 ## Results from the crude and adjusted models (confounder effect)
 
@@ -200,10 +178,28 @@ regress.display(fit2) ## adjusted coefficient
 ```
  
 
+
 ---
 class: middle, inverse
 
 ## What if we condition on a collider?
+
+---
+class: middle
+
+## Conditioning on a collider
+
+- Suppose that V3 depends on both V1 and V2, while V1 and V2 are independent from each other:
+
+
+```{r echo = FALSE, fig.align='center'}
+knitr::include_graphics("img/collider.png")
+```
+
+- Then V1 and V2 will be **conditionally dependent (given V3)**, even though they are marginally independent. 
+
+
+
 
 
 ---
@@ -421,8 +417,15 @@ regress.display(fit2, decimal = 3)
 
 
 ---
-class: middle, inverse, center 
+class: middle 
 ## How about conditioning colliders in a logistic regression model?
+
+
+- Model 0: $\text{logit}(\text{Hypertension}) = \beta_0 + \beta_1\text{SOD} + \varepsilon$ ;
+
+- Model 1: $\text{logit}(\text{Hypertension}) = \beta_0 + \beta_1\text{SOD} + \beta_2 \text{Age} + \varepsilon$ ;
+
+- Model 2: $\text{logit}(\text{Hypertension}) = \beta_0 + \beta_1\text{SOD} + \beta_2 \text{Age} + \beta_3\text{PRO} + \varepsilon$
 
 ---
 class: middle
