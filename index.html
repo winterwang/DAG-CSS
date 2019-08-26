@@ -500,7 +500,8 @@ class: middle
 fit3 &lt;- glm(hypertension ~ Sodium, family = binomial(link = "logit"), data = ObsData)
 # logistic.display(fit3, decimal = 3)
 library(broom)
-tidy(fit3, exponentiate =  TRUE, conf.int = TRUE)%&gt;% 
+library(tidyverse)
+tidy(fit3, exponentiate =  TRUE, conf.int = TRUE) %&gt;% 
    mutate_if(is.numeric, round, digits = 4)
 ```
 
@@ -686,9 +687,42 @@ A nutritional epidemiologist comes to discuss an analysis of some data that she 
 ---
 class: middle 
 
-## If the following causal diagram is correct
+### Following causal (DAG) diagram is drawn by this nutritional epidemiologist:
+
+&lt;img src="img/dagitty-modelpaper.png" style="display: block; margin: auto;" /&gt;
+
+???
+
+- exposure: dark green vegetable intake 
+- outcome: stomach cancer
+- observed variables: age, smoking, alochol intake
+- unobserved variables: allergies, and risky behaviour (circled)
+- She believes this is a plausible reprenstation of the relationship between these variables. 
+
+
+---
+class: middle 
+
+## Let's use the convenient DAG web application 
+
+[http://www.dagitty.net/dags.html](http://www.dagitty.net/dags.html)
+
+
+Johannes Textor, Benito van der Zander, Mark K. Gilthorpe, Maciej Liskiewicz, George T.H. Ellison. 
+Robust causal inference using directed acyclic graphs: the R package 'dagitty'.
+International Journal of Epidemiology 45(6):1887-1894, 2016.
+
+
+---
+class: middle
+
+## We will get the following effect of the DAG graph
 
 &lt;img src="img/dagitty-model.png" style="display: block; margin: auto;" /&gt;
+
+???
+- To denote that a variable is unobserved, we can move the mouse pointer on that variable and press U. 
+- Under the assumption that this diagram is correct, can you find out the minimal sufficient set of confounders?
 
 
 ---
@@ -700,18 +734,66 @@ class: middle, inverse, center
 
 ### Alcohol intake
 
+???
+- to see the effect of adjusting on a variable, move the mouse over that variable and press A. 
+
+- There are no sufficient adjustment sets that include alochol. 
+
+- This is because the path via Allergies and Risky behaviour will be opened by conditioning on alcohol (M-bias)
+
+- **This is also an example shows that conditioning on a baseline covariate can induce (rather than reduce) bias!!**
+
 
 ---
 class: middle 
 
-## The DAG web application 
+## Look at some of the results of various analyses of the data
 
-[http://www.dagitty.net/dags.html](http://www.dagitty.net/dags.html)
+The following odds ratios (OR) are for 1 unit increase in the exposure: 
+
+- OR for association between green vegetable intake and stomach cancer, **adjusted for age: 1.04**
+
+- OR for the same association **adjusted for age and alcohol intake: 0.66**
+
+- OR for the same association **adjusted for age and smoking: 1.03**
+
+- OR for the same association **adjusted for age, alcohol and smoking: 0.72**
+
+_Can you explain the changes of the above results?_
 
 
-Johannes Textor, Benito van der Zander, Mark K. Gilthorpe, Maciej Liskiewicz, George T.H. Ellison. 
-Robust causal inference using directed acyclic graphs: the R package 'dagitty'.
-International Journal of Epidemiology 45(6):1887-1894, 2016.
+
+---
+class: middle
+
+### Discussion on the different results shown in the previous slide
+
+- From the discussion so far we conclude that adjustment for age or age + smoking will estimate the true causal effect of green vegetable intake on stomach cancer. 
+
+- However, if we adjust for alcohol intake, the exposure showed a protective effect (OR = 0.66 or 0.72).
+
+- Suppose that: 
+    - certain allergies leads to both low alcohol consumption and low green vegetable intake
+    - risky behaviours cause high alcohol consumption and smoking
+    - Conditioning on alcohol intake will induce a positive association between allergies and risky behaviour. 
+
+???
+
+If someone is a heavy drinker, we also know that he/she is allergic to alcohol (so drinking alcohol is a risky behaviour). And somehow this allergy is related with lower intake of darkgreen vegetable. Then given the level of alcohol drinking (within strata of alcohol intake), a low vegetable intake, associated with allergies will related with risky behaviour, and will turn out to be associated with stomach cancer. 
+
+---
+class:middle, inverse, center
+
+## Your friend wants to report the results adjusted for alcohol because it shows that vegetable intake is protective against stomach cancer. 
+
+--
+## do you agree?
+
+--
+## you better say NO. 
+
+--
+## because this is a fake association caused by collider bias (controlling for alcohol intake)
 
 
 ---
