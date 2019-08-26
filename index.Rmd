@@ -703,12 +703,14 @@ knitr::include_graphics("img/dagitty-model.png")
 
 
 ---
-class: middle, inverse, center
+class: middle, inverse
 
 ## What do you think about the consequences of adjusting for the following variables?
 
+--
 ### Smoking status 
 
+--
 ### Alcohol intake
 
 ???
