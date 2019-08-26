@@ -688,7 +688,7 @@ International Journal of Epidemiology 45(6):1887-1894, 2016.
 ---
 class: middle
 
-## We will get the following effect of the DAG graph
+### We will get the following DAG graph
 
 ```{r echo = FALSE, fig.align='center'}
 knitr::include_graphics("img/dagitty-model.png")
